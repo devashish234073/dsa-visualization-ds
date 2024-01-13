@@ -1,5 +1,7 @@
 This example demonstrate two ways of calculating count of array subset with a particular sum
 
+Video Explainng the usage: https://www.youtube.com/watch?v=j8uFDNT3cBY
+
 At the top of the page there is a form where one can enter comma separated list and the sum that we are expecting from a sub array.
 The entered elements are also shown in green colored boxes in the bottom
 ![image](https://github.com/devashish234073/dsa-visualization-html-js/assets/20777854/aaad8845-85d8-4b71-943c-74821ea09027)
