@@ -38,6 +38,7 @@
         .sum {
             background-color: red;
             color: white;
+            font-size:14px;
         }
 
         .sumDistance {
@@ -110,7 +111,7 @@
                         itr.setAttribute("class", "itr");
                         sum += list[j];
                     }
-                    let sumTd = createTd(tr, sum);
+                    let sumTd = createTd(tr, "sum="+sum);
                     if (sum == expectedSum) {
                         count++;
                         for (let numTdsIndx in numTds) {
@@ -173,7 +174,7 @@
                     let itrTd = outTable.appendChild(tr);
                     itrTd.setAttribute("class", "itr");
                 }
-                let sumTd = createTd(tr, sum);
+                let sumTd = createTd(tr, "sum="+sum);
                 sumTd.setAttribute("class", "sum");
                 let sumDistance = sum - expectedSum;
                 let sumTd_1 = createTd(tr, sum +"-"+ expectedSum+" = "+sumDistance);
