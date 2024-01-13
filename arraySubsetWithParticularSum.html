@@ -24,10 +24,15 @@
             box-shadow: 7px 7px 7px lightgreen;
         }
 
+        .numSuccess {
+            border: 4px solid red;
+        }
+
         .sumDetails {
             font-size: 11px;
             color: black;
             background-color: orange;
+            overflow-y: scroll;
         }
 
         .sum {
@@ -73,38 +78,74 @@
     </table>
     <table id="outTable">
     </table>
+    <table>
+        <tr>
+            <td>Output</td>
+            <td id="output"></td>
+        </tr>
+    </table>
     <script>
         let numbers = document.querySelector("#numbers");
         let numsRow = document.querySelector("#numsRow");
         let outTable = document.querySelector("#outTable");
+        let output = document.querySelector("#output");
         let sumObj = document.querySelector("#sum");
         let list = [];
         let tmr = null;
-        let delay = 2000;
+        let delay = 800;
         function runBruteForce() {
             cleanUpOutput();
             let i = 0;
             console.log("prcessing list with bruteforce", list);
             let expectedSum = sumObj.value;
+            let count = 0;
             for (let a = 0; a < list.length; a++) {
                 for (let i = a; i < list.length; i++) {
                     let tr = document.createElement("tr");
                     sum = 0;
+                    let numTds = [];
                     for (let j = a; j <= i; j++) {
-                        createTd(tr, list[j]);
-                        let itrTd = outTable.appendChild(tr);
-                        itrTd.setAttribute("class", "itr");
+                        numTds.push(createTd(tr, list[j]));
+                        let itr = outTable.appendChild(tr);
+                        itr.setAttribute("class", "itr");
                         sum += list[j];
                     }
                     let sumTd = createTd(tr, sum);
-                    console.log(sum, sumObj.value);
                     if (sum == expectedSum) {
+                        count++;
+                        for (let numTdsIndx in numTds) {
+                            numTds[numTdsIndx].setAttribute("class", "numSuccess");
+                        }
                         sumTd.setAttribute("class", "sumSuccess");
                     } else {
                         sumTd.setAttribute("class", "sum");
                     }
                 }
             }
+            animateTo(".sumSuccess");
+            output.innerText = count;
+        }
+        function animateTo(selector) {
+            let elems = document.querySelectorAll(selector);
+            let i = 0;
+            if (tmr) {
+                clearInterval(tmr);
+            }
+            let indx = 0;
+            console.log("will start");
+            tmr = setInterval(() => {
+                let elem = elems[i];
+                console.log("going to ",elem);
+                console.log("going to ",typeof elem);
+                if (typeof elem == 'object') {
+                    console.log("will scroll");
+                    elem.scrollIntoView({ behavior: 'smooth' });
+                }
+                i++;
+                if(i>=elems.length) {
+                    clearInterval(tmr);
+                }
+            }, delay);
         }
         function runOptimal() {
             cleanUpOutput();
@@ -113,18 +154,18 @@
             let expectedSum = sumObj.value;
             let count = 0;
             let lstStr = "";
-            let lstStrMap ={};
+            let lstStrMap = {};
             for (let a = 0; a < list.length; a++) {
                 sum += list[a];
-                if(lstStr=="") {
-                    lstStr = "["+list[a];
+                if (lstStr == "") {
+                    lstStr = "[" + list[a];
                 } else {
-                    lstStr += ","+list[a];
+                    lstStr += "," + list[a];
                 }
-                if(!lstStrMap[sum]) {
+                if (!lstStrMap[sum]) {
                     lstStrMap[sum] = lstStr + "]";
                 } else {
-                    lstStrMap[sum] = lstStrMap[sum] + "\r\n" +  lstStr + "]";
+                    lstStrMap[sum] = lstStrMap[sum] + "\r\n" + lstStr + "]";
                 }
                 let tr = document.createElement("tr");
                 for (let j = 0; j <= a; j++) {
@@ -139,7 +180,7 @@
                 sumTd_1.setAttribute("class", "sumDistance");
                 if (sumMap[sumDistance]) {
                     count += sumMap[sumDistance];
-                    let sumTd2 = createTd(tr, "+"+sumMap[sumDistance]);
+                    let sumTd2 = createTd(tr, "+" + sumMap[sumDistance]);
                     sumTd2.setAttribute("class", "sumSuccess");
                     let sumTd3 = createTd(tr, lstStrMap[sumDistance]);
                     sumTd3.setAttribute("class", "sumDetails");
@@ -151,8 +192,10 @@
                     sumMap[sum] = 1;
                 }
             }
+            output.innerText = count;
         }
         function cleanUpOutput() {
+            output.innerText = "";
             clearAllChildNodex(outTable);
             if (tmr) {
                 clearInterval(tmr);
