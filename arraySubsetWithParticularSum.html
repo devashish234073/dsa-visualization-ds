@@ -24,8 +24,19 @@
             box-shadow: 7px 7px 7px lightgreen;
         }
 
+        .sumDetails {
+            font-size: 11px;
+            color: black;
+            background-color: orange;
+        }
+
         .sum {
             background-color: red;
+            color: white;
+        }
+
+        .sumDistance {
+            background-color: gray;
             color: white;
         }
 
@@ -74,19 +85,20 @@
             cleanUpOutput();
             let i = 0;
             console.log("prcessing list with bruteforce", list);
+            let expectedSum = sumObj.value;
             for (let a = 0; a < list.length; a++) {
                 for (let i = a; i < list.length; i++) {
                     let tr = document.createElement("tr");
                     sum = 0;
-                    for (let j = a; j <=i; j++) {
+                    for (let j = a; j <= i; j++) {
                         createTd(tr, list[j]);
                         let itrTd = outTable.appendChild(tr);
                         itrTd.setAttribute("class", "itr");
                         sum += list[j];
                     }
                     let sumTd = createTd(tr, sum);
-                    console.log(sum,sumObj.value);
-                    if(sum==sumObj.value) {
+                    console.log(sum, sumObj.value);
+                    if (sum == expectedSum) {
                         sumTd.setAttribute("class", "sumSuccess");
                     } else {
                         sumTd.setAttribute("class", "sum");
@@ -96,6 +108,49 @@
         }
         function runOptimal() {
             cleanUpOutput();
+            let sumMap = { 0: 1 };
+            let sum = 0;
+            let expectedSum = sumObj.value;
+            let count = 0;
+            let lstStr = "";
+            let lstStrMap ={};
+            for (let a = 0; a < list.length; a++) {
+                sum += list[a];
+                if(lstStr=="") {
+                    lstStr = "["+list[a];
+                } else {
+                    lstStr += ","+list[a];
+                }
+                if(!lstStrMap[sum]) {
+                    lstStrMap[sum] = lstStr + "]";
+                } else {
+                    lstStrMap[sum] = lstStrMap[sum] + "\r\n" +  lstStr + "]";
+                }
+                let tr = document.createElement("tr");
+                for (let j = 0; j <= a; j++) {
+                    createTd(tr, list[j]);
+                    let itrTd = outTable.appendChild(tr);
+                    itrTd.setAttribute("class", "itr");
+                }
+                let sumTd = createTd(tr, sum);
+                sumTd.setAttribute("class", "sum");
+                let sumDistance = sum - expectedSum;
+                let sumTd_1 = createTd(tr, sumDistance);
+                sumTd_1.setAttribute("class", "sumDistance");
+                if (sumMap[sumDistance]) {
+                    count += sumMap[sumDistance];
+                    let sumTd2 = createTd(tr, "+"+sumMap[sumDistance]);
+                    sumTd2.setAttribute("class", "sumSuccess");
+                    let sumTd3 = createTd(tr, lstStrMap[sumDistance]);
+                    sumTd3.setAttribute("class", "sumDetails");
+                    sumTd3.setAttribute("colspan", "3");
+                }
+                if (sumMap[sum]) {
+                    sumMap[sum] = sumMap[sum] + 1;
+                } else {
+                    sumMap[sum] = 1;
+                }
+            }
         }
         function cleanUpOutput() {
             clearAllChildNodex(outTable);
