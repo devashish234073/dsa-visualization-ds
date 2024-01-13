@@ -176,8 +176,9 @@
                 let sumTd = createTd(tr, sum);
                 sumTd.setAttribute("class", "sum");
                 let sumDistance = sum - expectedSum;
-                let sumTd_1 = createTd(tr, sumDistance);
+                let sumTd_1 = createTd(tr, sum +"-"+ expectedSum+" = "+sumDistance);
                 sumTd_1.setAttribute("class", "sumDistance");
+                sumTd_1.setAttribute("colspan", "2");
                 if (sumMap[sumDistance]) {
                     count += sumMap[sumDistance];
                     let sumTd2 = createTd(tr, "+" + sumMap[sumDistance]);
