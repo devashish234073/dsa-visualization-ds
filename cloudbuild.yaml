@@ -8,7 +8,9 @@ steps:
         apt-get update -y
         apt-get install -y git
         git clone https://github.com/devashish234073/dsa-visualization-html-js
-artifacts:
-  objects:
-    location: 'gs://buckpub/'
-    paths: ['dsa-visualization-html-js/**']
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', '-r', 'dsa-visualization-html-js/**', 'gs://buckpub/']
+#artifacts:
+#  objects:
+#    location: 'gs://buckpub/'
+#    paths: ['dsa-visualization-html-js/**']
