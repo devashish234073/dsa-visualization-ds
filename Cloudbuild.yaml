@@ -1,0 +1,14 @@
+steps:
+  - name: 'ubuntu:latest'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        # Update the package list and install necessary dependencies..
+        apt-get update -y
+        apt-get install -y git
+        git clone https://github.com/devashish234073/dsa-visualization-html-js
+artifacts:
+  objects:
+    location: 'gs://buckpub/'
+    paths: ['dsa-visualization-html-js']
