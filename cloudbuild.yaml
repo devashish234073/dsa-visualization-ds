@@ -8,7 +8,9 @@ steps:
         apt-get update -y
         apt-get install -y git
         git clone https://github.com/devashish234073/dsa-visualization-html-js
+        which python
+        which python3
 artifacts:
   objects:
     location: 'gs://buckpub/'
-    paths: ['dsa-visualization-html-js/*','dsa-visualization-html-js/*/*.html']
+    paths: ['dsa-visualization-html-js/*.html','dsa-visualization-html-js/*/*.html']
