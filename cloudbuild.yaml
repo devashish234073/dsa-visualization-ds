@@ -8,7 +8,8 @@ steps:
         apt-get update -y
         apt-get install -y git
         git clone https://github.com/devashish234073/dsa-visualization-html-js
-        apt install python3
+        apt install -y python3
+        cd dsa-visualization-html-js
         python index.py
 artifacts:
   objects:
