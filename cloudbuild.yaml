@@ -14,4 +14,4 @@ steps:
 artifacts:
   objects:
     location: 'gs://buckpub/'
-    paths: ['dsa-visualization-html-js/*.html','dsa-visualization-html-js/*/*.html']
+    paths: ['dsa-visualization-html-js/*','dsa-visualization-html-js/*/*.html']
