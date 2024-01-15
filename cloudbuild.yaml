@@ -9,7 +9,7 @@ steps:
         apt-get install -y git
         git clone https://github.com/devashish234073/dsa-visualization-html-js
         sudo apt install python3
-        python3 index.py
+        python index.py
 artifacts:
   objects:
     location: 'gs://buckpub/'
