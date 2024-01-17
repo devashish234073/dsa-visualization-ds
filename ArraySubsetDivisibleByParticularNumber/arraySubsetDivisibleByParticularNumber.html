@@ -17,13 +17,13 @@
 
         .itr {
             background-color: blueviolet;
-            color:white;
+            color: white;
         }
 
         .sumSuccess {
             background-color: lightgreen;
             box-shadow: 7px 7px 7px lightgreen;
-            color:brown;
+            color: brown;
         }
 
         .numSuccess {
@@ -40,7 +40,7 @@
         .sum {
             background-color: red;
             color: white;
-            font-size:14px;
+            font-size: 14px;
         }
 
         .sumDistance {
@@ -58,13 +58,13 @@
         #output {
             font-size: 20px;
             font-weight: bold;
-            color:blue;
+            color: blue;
         }
     </style>
 </head>
 
 <body>
-    
+
     <table>
         <tr>
             <td colspan="2">Array Subset with particular Sum</td>
@@ -90,11 +90,16 @@
     </table>
     <table>
         <tr>
-            <td><h1>Total Count: </h1></td>
+            <td>
+                <h1>Total Count: </h1>
+            </td>
             <td id="output"></td>
         </tr>
     </table>
-    <iframe width="240" height="120" src="https://www.youtube.com/embed/j8uFDNT3cBY" title="Visualizing the problem &quot;count of subarray with a particular sum&quot; | DSA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <iframe width="240" height="120" src="https://www.youtube.com/embed/j8uFDNT3cBY"
+        title="Visualizing the problem &quot;count of subarray with a particular sum&quot; | DSA" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>
     <script>
         let numbers = document.querySelector("#numbers");
         let numsRow = document.querySelector("#numsRow");
@@ -121,8 +126,8 @@
                         itr.setAttribute("class", "itr");
                         sum += list[j];
                     }
-                    let remainder = sum%divisibleBy;
-                    let sumTd = createTd(tr, "sum="+sum+"\r\nremainder="+(remainder));
+                    let remainder = sum % divisibleBy;
+                    let sumTd = createTd(tr, "sum=" + sum + "\r\nremainder=" + (remainder));
                     if (remainder == 0) {
                         count++;
                         for (let numTdsIndx in numTds) {
@@ -147,37 +152,48 @@
             console.log("will start");
             tmr = setInterval(() => {
                 let elem = elems[i];
-                console.log("going to ",elem);
-                console.log("going to ",typeof elem);
+                console.log("going to ", elem);
+                console.log("going to ", typeof elem);
                 if (typeof elem == 'object') {
                     console.log("will scroll");
                     elem.scrollIntoView({ behavior: 'smooth' });
                 }
                 i++;
-                if(i>=elems.length) {
+                if (i >= elems.length) {
                     clearInterval(tmr);
                 }
             }, delay);
         }
+        function getRemainder(sum, divisibleBy) {
+            let remainder = sum % divisibleBy;
+            if (remainder < 0) {
+                return divisibleBy + remainder;
+            }
+            return remainder;
+        }
         function runOptimal() {
             cleanUpOutput();
-            let sumMap = { 0: 1 };
+            let divisibilityMap = { 0: 1 };
             let sum = 0;
-            let expectedSum = sumObj.value;
+            let divisibleBy = parseInt(divisibleByObj.value);
             let count = 0;
             let lstStr = "";
             let lstStrMap = {};
             for (let a = 0; a < list.length; a++) {
                 sum += list[a];
+                let remainder = sum % divisibleBy;
+                if (remainder < 0) {
+                    remainder+=divisibleBy;
+                }
                 if (lstStr == "") {
                     lstStr = "[" + list[a];
                 } else {
                     lstStr += "," + list[a];
                 }
-                if (!lstStrMap[sum]) {
-                    lstStrMap[sum] = lstStr + "]="+sum;
+                if (!lstStrMap[remainder]) {
+                    lstStrMap[remainder] = lstStr + "]=" + sum + "\r\nremainder=" + remainder;
                 } else {
-                    lstStrMap[sum] = lstStrMap[sum] + "\r\n" + lstStr + "]="+sum;
+                    lstStrMap[remainder] = lstStrMap[remainder] + "\r\n" + lstStr + "]=" + sum + "\r\nremainder=" + remainder;
                 }
                 let tr = document.createElement("tr");
                 for (let j = 0; j <= a; j++) {
@@ -185,24 +201,24 @@
                     let itrTd = outTable.appendChild(tr);
                     itrTd.setAttribute("class", "itr");
                 }
-                let sumTd = createTd(tr, "sum="+sum);
+                let sumTd = createTd(tr, "sum=" + sum + "\r\nremainder=" + remainder);
                 sumTd.setAttribute("class", "sum");
-                let sumDistance = sum - expectedSum;
-                let sumTd_1 = createTd(tr, sum +"-"+ expectedSum+" = "+sumDistance);
+                /*let divisibilityDistance = remainder - divisibleBy;
+                let sumTd_1 = createTd(tr, remainder + "-" + divisibleBy + " = " + divisibilityDistance);
                 sumTd_1.setAttribute("class", "sumDistance");
-                sumTd_1.setAttribute("colspan", "2");
-                if (sumMap[sumDistance]) {
-                    count += sumMap[sumDistance];
-                    let sumTd2 = createTd(tr, "+" + sumMap[sumDistance]);
+                sumTd_1.setAttribute("colspan", "2");*/
+                if (divisibilityMap[remainder]) {
+                    count += divisibilityMap[remainder];
+                    let sumTd2 = createTd(tr, "+" + divisibilityMap[remainder]);
                     sumTd2.setAttribute("class", "sumSuccess");
-                    let sumTd3 = createTd(tr, "Remove subarr to get "+expectedSum+"\r\n"+lstStrMap[sumDistance]);
+                    let sumTd3 = createTd(tr, "Remove subarr to get sum divisibleBy " + divisibleBy + "\r\n" + lstStrMap[remainder]);
                     sumTd3.setAttribute("class", "sumDetails");
                     sumTd3.setAttribute("colspan", "3");
                 }
-                if (sumMap[sum]) {
-                    sumMap[sum] = sumMap[sum] + 1;
+                if (divisibilityMap[remainder]) {
+                    divisibilityMap[remainder] = divisibilityMap[remainder] + 1;
                 } else {
-                    sumMap[sum] = 1;
+                    divisibilityMap[remainder] = 1;
                 }
             }
             output.innerText = count;
