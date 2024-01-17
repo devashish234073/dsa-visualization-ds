@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Subset divisible by particular number</title>
+    <style>
+        #numsRow td {
+            background-color: darkgreen;
+            color: white;
+            height: 40px;
+            width: 50px;
+            border-radius: 10px;
+            padding-left: 15px;
+        }
+
+        .itr {
+            background-color: blueviolet;
+            color:white;
+        }
+
+        .sumSuccess {
+            background-color: lightgreen;
+            box-shadow: 7px 7px 7px lightgreen;
+            color:brown;
+        }
+
+        .numSuccess {
+            border: 8px solid cyan;
+        }
+
+        .sumDetails {
+            font-size: 11px;
+            color: black;
+            background-color: orange;
+            overflow-y: scroll;
+        }
+
+        .sum {
+            background-color: red;
+            color: white;
+            font-size:14px;
+        }
+
+        .sumDistance {
+            background-color: gray;
+            color: white;
+        }
+
+        #outTable td {
+            height: 40px;
+            width: 50px;
+            border-radius: 10px;
+            padding-left: 15px;
+        }
+
+        #output {
+            font-size: 20px;
+            font-weight: bold;
+            color:blue;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <table>
+        <tr>
+            <td colspan="2">Array Subset with particular Sum</td>
+        </tr>
+        <tr>
+            <td>Enter array elements</td>
+            <td><input id="numbers" type="text" value="1,-9,9,3,2,1,-7,7,1,1,1,2,3,-3,3,4,1"
+                    placeholder="Comma separated numbers"></td>
+        </tr>
+        <tr>
+            <td>Enter sum expected</td>
+            <td><input id="divisibleBy" type="number" value="7"></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Do Optimal" onclick="runOptimal()"></td>
+            <td><input type="submit" value="Do Brute Force" onclick="runBruteForce()"></td>
+        </tr>
+    </table>
+    <table>
+        <tr id="numsRow"></tr>
+    </table>
+    <table id="outTable">
+    </table>
+    <table>
+        <tr>
+            <td><h1>Total Count: </h1></td>
+            <td id="output"></td>
+        </tr>
+    </table>
+    <iframe width="240" height="120" src="https://www.youtube.com/embed/j8uFDNT3cBY" title="Visualizing the problem &quot;count of subarray with a particular sum&quot; | DSA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <script>
+        let numbers = document.querySelector("#numbers");
+        let numsRow = document.querySelector("#numsRow");
+        let outTable = document.querySelector("#outTable");
+        let output = document.querySelector("#output");
+        let divisibleByObj = document.querySelector("#divisibleBy");
+        let list = [];
+        let tmr = null;
+        let delay = 500;
+        function runBruteForce() {
+            cleanUpOutput();
+            let i = 0;
+            console.log("prcessing list with bruteforce", list);
+            let divisibleBy = divisibleByObj.value;
+            let count = 0;
+            for (let a = 0; a < list.length; a++) {
+                for (let i = a; i < list.length; i++) {
+                    let tr = document.createElement("tr");
+                    sum = 0;
+                    let numTds = [];
+                    for (let j = a; j <= i; j++) {
+                        numTds.push(createTd(tr, list[j]));
+                        let itr = outTable.appendChild(tr);
+                        itr.setAttribute("class", "itr");
+                        sum += list[j];
+                    }
+                    let remainder = sum%divisibleBy;
+                    let sumTd = createTd(tr, "sum="+sum+"\r\nremainder="+(remainder));
+                    if (remainder == 0) {
+                        count++;
+                        for (let numTdsIndx in numTds) {
+                            numTds[numTdsIndx].setAttribute("class", "numSuccess");
+                        }
+                        sumTd.setAttribute("class", "sumSuccess");
+                    } else {
+                        sumTd.setAttribute("class", "sum");
+                    }
+                }
+            }
+            animateTo(".sumSuccess");
+            output.innerText = count;
+        }
+        function animateTo(selector) {
+            let elems = document.querySelectorAll(selector);
+            let i = 0;
+            if (tmr) {
+                clearInterval(tmr);
+            }
+            let indx = 0;
+            console.log("will start");
+            tmr = setInterval(() => {
+                let elem = elems[i];
+                console.log("going to ",elem);
+                console.log("going to ",typeof elem);
+                if (typeof elem == 'object') {
+                    console.log("will scroll");
+                    elem.scrollIntoView({ behavior: 'smooth' });
+                }
+                i++;
+                if(i>=elems.length) {
+                    clearInterval(tmr);
+                }
+            }, delay);
+        }
+        function runOptimal() {
+            cleanUpOutput();
+            let sumMap = { 0: 1 };
+            let sum = 0;
+            let expectedSum = sumObj.value;
+            let count = 0;
+            let lstStr = "";
+            let lstStrMap = {};
+            for (let a = 0; a < list.length; a++) {
+                sum += list[a];
+                if (lstStr == "") {
+                    lstStr = "[" + list[a];
+                } else {
+                    lstStr += "," + list[a];
+                }
+                if (!lstStrMap[sum]) {
+                    lstStrMap[sum] = lstStr + "]="+sum;
+                } else {
+                    lstStrMap[sum] = lstStrMap[sum] + "\r\n" + lstStr + "]="+sum;
+                }
+                let tr = document.createElement("tr");
+                for (let j = 0; j <= a; j++) {
+                    createTd(tr, list[j]);
+                    let itrTd = outTable.appendChild(tr);
+                    itrTd.setAttribute("class", "itr");
+                }
+                let sumTd = createTd(tr, "sum="+sum);
+                sumTd.setAttribute("class", "sum");
+                let sumDistance = sum - expectedSum;
+                let sumTd_1 = createTd(tr, sum +"-"+ expectedSum+" = "+sumDistance);
+                sumTd_1.setAttribute("class", "sumDistance");
+                sumTd_1.setAttribute("colspan", "2");
+                if (sumMap[sumDistance]) {
+                    count += sumMap[sumDistance];
+                    let sumTd2 = createTd(tr, "+" + sumMap[sumDistance]);
+                    sumTd2.setAttribute("class", "sumSuccess");
+                    let sumTd3 = createTd(tr, "Remove subarr to get "+expectedSum+"\r\n"+lstStrMap[sumDistance]);
+                    sumTd3.setAttribute("class", "sumDetails");
+                    sumTd3.setAttribute("colspan", "3");
+                }
+                if (sumMap[sum]) {
+                    sumMap[sum] = sumMap[sum] + 1;
+                } else {
+                    sumMap[sum] = 1;
+                }
+            }
+            output.innerText = count;
+        }
+        function cleanUpOutput() {
+            output.innerText = "";
+            clearAllChildNodex(outTable);
+            if (tmr) {
+                clearInterval(tmr);
+            }
+        }
+        function createTd(row, txt) {
+            let td = document.createElement("td");
+            td.innerText = txt;
+            row.appendChild(td);
+            return td;
+        }
+        function clearAllChildNodex(elem) {
+            while (elem.hasChildNodes()) {
+                elem.removeChild(elem.childNodes[0]);
+            }
+        }
+        numbers.addEventListener("keyup", () => {
+            populateList();
+        });
+        function populateList() {
+            let nums = numbers.value.trim();
+            if (nums == "") {
+                list = [];
+                clearAllChildNodex(numsRow);
+                return;
+            }
+            if (nums[nums.length - 1] != ",") {
+                list = [];
+                clearAllChildNodex(numsRow);
+                let numsSplit = nums.split(",");
+                for (let indx in numsSplit) {
+                    let num = numsSplit[indx];
+                    if (num != "" && !isNaN(num)) {
+                        num = parseInt(num);
+                        list.push(num);
+                        createTd(numsRow, num);
+                    }
+                }
+            }
+        }
+        populateList();
+    </script>
+</body>
+
+</html>
