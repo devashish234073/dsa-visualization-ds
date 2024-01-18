@@ -40,7 +40,7 @@
         .sum {
             background-color: red;
             color: white;
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .sumDistance {
@@ -67,7 +67,7 @@
 
     <table>
         <tr>
-            <td colspan="2">Array Subset with particular Sum</td>
+            <td colspan="2" id="title">Array Subset divisible by 7</td>
         </tr>
         <tr>
             <td>Enter array elements</td>
@@ -105,7 +105,15 @@
         let numsRow = document.querySelector("#numsRow");
         let outTable = document.querySelector("#outTable");
         let output = document.querySelector("#output");
+        let title = document.querySelector("#title");
         let divisibleByObj = document.querySelector("#divisibleBy");
+        divisibleBy.addEventListener("keyup",()=>{
+            if(divisibleBy.value=="" || isNaN(divisibleBy.value)) {
+                title.innerText = "";
+            } else {
+                title.innerText = "Array Subset divisible by "+divisibleBy.value;
+            }
+        });
         let list = [];
         let tmr = null;
         let delay = 500;
@@ -182,18 +190,15 @@
             for (let a = 0; a < list.length; a++) {
                 sum += list[a];
                 let remainder = sum % divisibleBy;
+                let rawRemainder = remainder;
                 if (remainder < 0) {
                     remainder+=divisibleBy;
                 }
+                let normalizedRemainder = remainder;
                 if (lstStr == "") {
                     lstStr = "[" + list[a];
                 } else {
                     lstStr += "," + list[a];
-                }
-                if (!lstStrMap[remainder]) {
-                    lstStrMap[remainder] = lstStr + "]=" + sum + "\r\nremainder=" + remainder;
-                } else {
-                    lstStrMap[remainder] = lstStrMap[remainder] + "\r\n" + lstStr + "]=" + sum + "\r\nremainder=" + remainder;
                 }
                 let tr = document.createElement("tr");
                 for (let j = 0; j <= a; j++) {
@@ -201,7 +206,11 @@
                     let itrTd = outTable.appendChild(tr);
                     itrTd.setAttribute("class", "itr");
                 }
-                let sumTd = createTd(tr, "sum=" + sum + "\r\nremainder=" + remainder);
+                let tdTxt = "sum=" + sum + "\r\nremainder=" + rawRemainder;
+                if(rawRemainder!=normalizedRemainder) {
+                    tdTxt += "\r\nNormalized rem.=" + normalizedRemainder;
+                }
+                let sumTd = createTd(tr, tdTxt);
                 sumTd.setAttribute("class", "sum");
                 /*let divisibilityDistance = remainder - divisibleBy;
                 let sumTd_1 = createTd(tr, remainder + "-" + divisibleBy + " = " + divisibilityDistance);
@@ -214,6 +223,14 @@
                     let sumTd3 = createTd(tr, "Remove subarr to get sum divisibleBy " + divisibleBy + "\r\n" + lstStrMap[remainder]);
                     sumTd3.setAttribute("class", "sumDetails");
                     sumTd3.setAttribute("colspan", "3");
+                }
+                if (!lstStrMap[remainder]) {
+                    lstStrMap[remainder] = lstStr + "]=" + sum + ", rem=" + rawRemainder;
+                } else {
+                    lstStrMap[remainder] = lstStrMap[remainder] + "\r\n" + lstStr + "]=" + sum + ", rem=" + rawRemainder;
+                }
+                if(rawRemainder!=normalizedRemainder) {
+                    lstStrMap[remainder] = lstStrMap[remainder] + ", Normlzd rem.=" + normalizedRemainder;
                 }
                 if (divisibilityMap[remainder]) {
                     divisibilityMap[remainder] = divisibilityMap[remainder] + 1;
