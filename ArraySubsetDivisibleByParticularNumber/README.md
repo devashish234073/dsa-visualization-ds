@@ -4,7 +4,8 @@ Video Explainng the usage: []
 
 At the top of the page there is a form where one can enter comma separated list and the sum that we are expecting from a sub array.
 The entered elements are also shown in green colored boxes in the bottom
-![image](https://github.com/devashish234073/dsa-visualization-html-js/assets/20777854/aaad8845-85d8-4b71-943c-74821ea09027)
+![image](https://github.com/devashish234073/dsa-visualization-html-js/assets/20777854/622ad08d-562a-45f5-b8d5-c9bb8fb69f02)
+
 
 The two buttons do optimal and do brute force are demonstrating the two algorithms:
 
