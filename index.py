@@ -22,6 +22,8 @@ def scan_folders(current_path):
                     for folder in folders:
                         parts = re.split('(?=[A-Z])', folder)
                         html = parts[0].lower() + ''.join(parts[1:]) + ".html"
+                        if parts[0]=="" :
+                            html = parts[1].lower() + ''.join(parts[2:]) + ".html"
                         link_name = ' '.join(parts)
                         mid += f"<li><a href=\"{html}\">{link_name}</a></li>\r\n"
 
