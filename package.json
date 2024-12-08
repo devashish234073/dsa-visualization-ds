@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/devashish234073/dsa-visualization-html-js/issues"
   },
-  "homepage": "https://github.com/devashish234073/dsa-visualization-html-js#readme"
+  "homepage": "https://github.com/devashish234073/dsa-visualization-html-js#readme",
+  "dependencies": {
+    "dsa-visualization-html": "file:"
+  }
 }
